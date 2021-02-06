@@ -47,7 +47,7 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     // Get rays from scan
     pcl::PointCloud<pcl::PointXYZ>::Ptr rays = lidar_sensor->scan();
 
-    // Render Rays
+    // Uncomment to Render Rays
     // renderRays(viewer, lidar_sensor->position,rays);
     // renderPointCloud(viewer, rays, "Point Cloud");
 
@@ -56,6 +56,7 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
 
     // separate clouds
     std::pair<pcl::PointCloud<pcl::PointXYZ>::Ptr, pcl::PointCloud<pcl::PointXYZ>::Ptr> segmentCloud = point_processor->SegmentPlane(rays, 100, 0.2);
+    // Uncomment to render point clouds
     // renderPointCloud(viewer, segmentCloud.first, "obstCloud", Color(1,0,0));
     // renderPointCloud(viewer, segmentCloud.second, "planeCloud", Color(0,1,0));
 
@@ -152,8 +153,6 @@ int main (int argc, char** argv)
     auto streamIterator = stream.begin();
     pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud_I;
 
-	int frame_counter = 0;
-	std::string filename_prefix = "img_";
 	while (!viewer->wasStopped ())
     {
         // Clear viewer
@@ -169,12 +168,5 @@ int main (int argc, char** argv)
             streamIterator = stream.begin();
 
         viewer->spinOnce ();
-		std::stringstream ss;
-		ss << filename_prefix << std::setw(5) << std::setfill('0') << frame_counter << ".png";
-		std::string filename = ss.str();
-		viewer->saveScreenshot(filename);
-		frame_counter++;
-		if(frame_counter>21)
-			break;
     } 
 }

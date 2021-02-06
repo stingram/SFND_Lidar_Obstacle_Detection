@@ -7,8 +7,10 @@ This project showcases a lidar point cloud data processing pipeline that could f
 - A Euclidean clustering algorithm, used to segment obstacles represented by the remaining lidar points. This clustering algorithm internally uses a k-d tree to quickly find approximate nearest neighbors for each point in the point cloud. The implementation of this algorithm is provided in the [src/processPointClouds.cpp](src/processPointClouds.cpp) file. The k-d tree implementation can be found in the [src/kdtree.h](src/kdtree.h) file.
 
 ### Demo
-#### First set of point clouds
+##### Raw Point Clouds
 ![ANIMATION](media/raw_cloud.gif)
+
+##### Processed Point Clouds
 ![ANIMATION](media/processed_cloud.gif)
 
 
