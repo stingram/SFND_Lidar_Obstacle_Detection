@@ -27,7 +27,7 @@ typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(ty
     // Time segmentation process
     auto startTime = std::chrono::steady_clock::now();
 
-    // TODO:: Fill in the function to do voxel grid point reduction and region based filtering
+    // Voxel grid point reduction and region based filtering
     typename pcl::VoxelGrid<PointT> sor;
     typename pcl::PointCloud<PointT>::Ptr cloud_filtered(new pcl::PointCloud<PointT>());
     typename pcl::PointCloud<PointT>::Ptr cloud_box(new pcl::PointCloud<PointT>());
@@ -85,7 +85,7 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
     // Time segmentation process
     auto startTime = std::chrono::steady_clock::now();
 	
-    // TODO:: Fill in this function to find inliers for the cloud.
+    // Find inliers for the cloud.
     pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients());
     pcl::PointIndices::Ptr inliers (new pcl::PointIndices());
     
@@ -162,12 +162,11 @@ std::unordered_set<int> ProcessPointClouds<PointT>::RansacProject(typename pcl::
 		C = (p2.x-p1.x)*(p3.y-p1.y) - (p2.y-p1.y)*(p3.x-p1.x);
 		D = -1*(A*p1.x+B*p1.y+C*p1.z);
 
-		// Measure distance between every point and fitted line
+		// Measure distance between every point and fitted plane
 		// If distance is smaller than threshold count it as inlier
 		for(int i=0;i<cloud->size();i++)
 		{
 			point = cloud->at(i);
-			// dist = std::abs(A*point.x + B*point.y + C)/std::sqrt(A*A + B*B + 0.000000001);
 			dist = std::abs(A*point.x + B*point.y + C*point.z + D)/std::sqrt(A*A + B*B + C*C + 0.000000001);
 			if(dist < distanceTol)
 			{
@@ -178,7 +177,6 @@ std::unordered_set<int> ProcessPointClouds<PointT>::RansacProject(typename pcl::
 		if(temp_inliers.size()>max_inliers.size())
 		{
 			// copy temp_inliers to max_inliers
-			//max_inliers.clear();
 			max_inliers.assign(temp_inliers.begin(), temp_inliers.end());
 		}
 	
@@ -289,7 +287,8 @@ std::vector<typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::e
 			// create cluster
 			typename pcl::PointCloud<PointT>::Ptr cluster (new pcl::PointCloud<PointT>);
 			proximityProject(cloud, i, cluster, visited, tree, distanceTol);
-			clusters.push_back(cluster);
+			if(cluster->size()>=5)
+				clusters.push_back(cluster);
 		}
 	}
  

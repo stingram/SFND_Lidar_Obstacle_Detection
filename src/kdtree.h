@@ -110,7 +110,7 @@ struct KdTree
 			(node_point.y < boundaries.at(1).first || node_point.y > boundaries.at(1).second) || 
 				(node_point.z < boundaries.at(2).first || node_point.z > boundaries.at(2).second))
 		{
-			// along som dimension the current node point is too far from target
+			// along some dimension the current node point is too far from target
 			// check for overlap of bounding box with two dividing zones for this node
 			return false;
 		}

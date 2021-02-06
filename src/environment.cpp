@@ -1,11 +1,7 @@
-/* \author Aaron Brown */
-// Create simple 3d highway enviroment using PCL
-// for exploring self-driving car sensors
-
 #include "sensors/lidar.h"
 #include "render/render.h"
 #include "processPointClouds.h"
-// using templates for processPointClouds so also include .cpp to help linker
+
 #include "processPointClouds.cpp"
 
 std::vector<Car> initHighway(bool renderScene, pcl::visualization::PCLVisualizer::Ptr& viewer)
@@ -45,7 +41,7 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     bool renderScene = false;
     std::vector<Car> cars = initHighway(renderScene, viewer);
     
-    // TODO:: Create lidar sensor
+    //Create lidar sensor
     Lidar* lidar_sensor = new Lidar(cars, 0); 
 
     // Get rays from scan
@@ -55,7 +51,7 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     // renderRays(viewer, lidar_sensor->position,rays);
     // renderPointCloud(viewer, rays, "Point Cloud");
 
-    // TODO:: Create point processor
+    // Create point processor
     ProcessPointClouds<pcl::PointXYZ>* point_processor = new ProcessPointClouds<pcl::PointXYZ>();
 
     // separate clouds
@@ -156,7 +152,9 @@ int main (int argc, char** argv)
     auto streamIterator = stream.begin();
     pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud_I;
 
-    while (!viewer->wasStopped ())
+	int frame_counter = 0;
+	std::string filename_prefix = "img_";
+	while (!viewer->wasStopped ())
     {
         // Clear viewer
         viewer->removeAllPointClouds();
@@ -171,5 +169,12 @@ int main (int argc, char** argv)
             streamIterator = stream.begin();
 
         viewer->spinOnce ();
+		std::stringstream ss;
+		ss << filename_prefix << std::setw(5) << std::setfill('0') << frame_counter << ".png";
+		std::string filename = ss.str();
+		viewer->saveScreenshot(filename);
+		frame_counter++;
+		if(frame_counter>21)
+			break;
     } 
 }
